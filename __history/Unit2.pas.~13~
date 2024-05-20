@@ -1,0 +1,62 @@
+unit Unit2;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, Vcl.StdCtrls, ClipBrd;
+
+type
+  TForm2 = class(TForm)
+    generateBtn: TButton;
+    Label1: TLabel;
+    copyBtn: TButton;
+    Label2: TLabel;
+    length: TEdit;
+    generatedLabel: TLabel;
+    errorText: TLabel;
+    procedure generateBtnClick(Sender: TObject);
+    procedure copyBtnClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form2: TForm2;
+  newText: string;
+  lengthVar: integer;
+
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm2.copyBtnClick(Sender: TObject);
+begin
+  Clipboard.AsText := newText;       // copy the new text to clipboard
+end;
+
+procedure TForm2.generateBtnClick(Sender: TObject);
+begin
+  lengthVar := StrToInt(length.Text);   // get the length from user
+
+  { validate the length create an error if there is a problem }
+   if lengthVar > 31 then
+      errorText.Caption := 'Input too large!';
+      errorText.Visible := true;
+   else
+      errorText.Visible := false;
+
+
+  { generate random name }
+  newText := 'hellooo';
+
+
+  { show the random name to user }
+  generatedLabel.Caption := newText;
+
+end;
+
+end.

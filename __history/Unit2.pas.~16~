@@ -1,0 +1,115 @@
+unit Unit2;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, Vcl.StdCtrls, ClipBrd;
+
+type
+  TForm2 = class(TForm)
+    generateBtn: TButton;
+    Label1: TLabel;
+    copyBtn: TButton;
+    Label2: TLabel;
+    length: TEdit;
+    generatedLabel: TLabel;
+    errorText: TLabel;
+    procedure generateBtnClick(Sender: TObject);
+    procedure copyBtnClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form2: TForm2;
+  newText: string;
+  vowels : array of char;
+  notVowels : array of char;
+
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm2.copyBtnClick(Sender: TObject);
+begin
+  Clipboard.AsText := newText;       // copy the new text to clipboard
+end;
+
+procedure TForm2.FormCreate(Sender: TObject);
+var
+  i, j, k : integer;
+  contains : boolean;
+begin
+  vowels := ['a', 'e', 'i', 'o', 'u'];
+  k := 0;
+  
+  for i := 97 to 123 do
+    begin
+      contains := false;
+      for j := 0 to 5 do
+      begin
+        if(vowels[j] = char(i)) then
+        begin
+          contains := true;
+          break;
+        end;
+      end;
+
+      if(contains) then
+        continue;
+
+      notVowels[k] := char(i);
+      k := k+1;
+    end;
+
+end;
+
+procedure TForm2.generateBtnClick(Sender: TObject);
+var
+  randomIndex, nameLength, i   : integer;
+  isVowel   : boolean;
+begin
+  nameLength := StrToInt(length.Text);   // get the length from user
+
+  { validate the length create an error if there is a problem }
+   if nameLength > 31 then
+   begin
+      errorText.Caption := 'Input too large!';
+      errorText.Visible := true;
+      Exit;
+   end
+   else
+      errorText.Visible := false;
+
+
+  { generate random name }
+  newText := '';
+  isVowel := false;
+
+  for  i := 0 to nameLength do
+  begin
+    randomize();
+    if(isVowel) then
+    begin
+      randomIndex := random(5);
+      newText := newText + vowels[randomIndex]
+    end
+    else
+    begin
+      randomIndex := random(21);
+      newText := newText + notVowels[randomIndex];
+    end;
+    isVowel := not isVowel;  
+  end;
+
+  { show the random name to user }
+  generatedLabel.Caption := newText;
+
+end;
+
+end.
